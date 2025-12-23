@@ -206,7 +206,7 @@ def read_log_json(filepath):
             # unexpected JSON 
             yield data
 
-## XML log reader function (all vibe coded :p ) 
+## XML log reader function (all vibe coded XML makes my brain hurt :p ) 
 def read_log_xml(filepath):
     """
     Reads an XML log file and yields raw entries as dictionaries.
@@ -324,7 +324,7 @@ def output_results(top=10, format="text"):
         for value, count in coutner.most_common(top):
             print(f"  {value}: {count}")
         print()
-        
+
 
 # Main function to coordinate reading, parsing, and outputting log data
 def main():
