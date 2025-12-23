@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 
-# import libraries 
-
 import argparse
 import chardet
 import json 
@@ -9,17 +7,11 @@ import csv
 import xml.etree.ElementTree as ET
 from datetime import datetime 
 from collections import Counter
-# import re 
-# import datetime
-# import lxml.etree
-# import ...
 
 """
 PyParser - A 'simple' log parser for HTTP 404 error, SSH/Telnet, and Firewall logs produced by DShield Honeypots
 
 """
-
-################# variables and constants ####################
 # -------------------------
 # LOG STRUCTURE DEFINITIONS
 # -------------------------
@@ -33,6 +25,7 @@ log_details_structure = {
 supported_log_types = list(log_details_structure.keys())
 supported_file_formats = ["JSON", "CSV", "XML", "TAB"]
 
+# log entry 
 def create_empty_log_entry(event_type):
     return {
         "timestamp": None,
@@ -42,8 +35,7 @@ def create_empty_log_entry(event_type):
     }
 
 
-# Define function to convert parsed log entries into standardized structure
-## Common function to map log details based on log type
+# Function to map log details
 def normalize_log_entry(raw_log_data, event_type):
     # Create a clean, empty log entry for this event type
     entry = create_empty_log_entry(event_type)
@@ -79,9 +71,11 @@ def build_timestamp(date_str, time_str):
     raise ValueError(f"Unrecognized timestamp format: {combined}")
 
 
-################# END variables and Constants END ####################
+################# END LOG STRUCTURE DEFINITIONS END ####################
 
-################# Argument Parser ####################
+# -------------------------
+# ARGUMENT PARSE STRUCTURE
+# -------------------------
 def parse_arguments():
     parser = argparse.ArgumentParser(
         description="Parse and analyze log files from multiple formats"
@@ -127,9 +121,11 @@ def parse_arguments():
         help="Number of top results to display (defult: 10)."
     )
     return parser.parse_args()
-################# END Argument Parser END ####################
+################# END ARGUMENT PARSE STRUCTURE END ####################
 
-################# Reader Functions ####################
+# -------------------------
+# RAW DATA READER STRUCTURE
+# -------------------------
 # Reads file as raw data and checks encoding 
 def open_log_file(filepath, mode="r", newline=""):
     """
@@ -279,10 +275,12 @@ def get_log_reader(file_type):
     
     return readers[file_type]
 
-################# END Reader Functions END ####################
+################# END RAW DATA READER STRUCTURE END ####################
 
 
-################# Metrics & Proccessing ####################
+# -------------------------
+# METRICS & OUTPUT STRUCTURE
+# -------------------------
 metrics = {
     "source_ip": Counter(),
     "url_path": Counter(),
@@ -324,8 +322,11 @@ def output_results(top=10, format="text"):
         for value, count in coutner.most_common(top):
             print(f"  {value}: {count}")
         print()
+################# END METRICS & OUTPUT STRUCTURE END ####################
 
-
+# -------------------------
+# MAIN FUNCTION
+# -------------------------
 # Main function to coordinate reading, parsing, and outputting log data
 def main():
     args = parse_arguments()
@@ -347,6 +348,9 @@ def main():
     # Output parsed data
     output_results(top=args.top, format=args.output_format)
     pass  # Placeholder for main function logic
+################# END MAIN FUNCTION END ####################
 
-# Call main function when script is executed
+# -------------------------
+# CALL MAIN
+# -------------------------
 main()
