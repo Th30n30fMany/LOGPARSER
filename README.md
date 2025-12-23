@@ -1,10 +1,17 @@
-# **LOGParser**
+# LogParser
 
-A lightweight, modular log‑parsing tool for analyzing HTTP, SSH/Telnet, and Firewall logs produced by DShield honeypots. PyParser reads multiple file formats, normalizes entries into a unified schema, computes metrics, and outputs clean reports.
+A lightweight, modular log‑analysis tool for DShield honeypots and other security logs.
 
-## **Features**
+<p align="center">
+<img src="assets/logo.png" width="180" alt="LogParser Logo">
+</p>
 
-- **Multi‑format input support**
+LogParser (pronounced like wood log, not system log) is a simple but powerful Python tool for parsing, normalizing, and analyzing logs from HTTP, SSH/Telnet, and Firewall sources. It supports multiple input formats, produces clean metrics, and outputs human‑readable or JSON reports.
+
+
+## Features
+
+- Multi‑format input support
     
     - CSV
         
@@ -14,7 +21,7 @@ A lightweight, modular log‑parsing tool for analyzing HTTP, SSH/Telnet, and Fi
         
     - TAB‑delimited
         
-- **Multiple log types**
+- Multiple log types
     
     - HTTP (404 probes, scanners, crawlers)
         
@@ -22,117 +29,104 @@ A lightweight, modular log‑parsing tool for analyzing HTTP, SSH/Telnet, and Fi
         
     - Firewall (port scans, blocked traffic)
         
-- **Unified normalization layer** Converts raw logs into a consistent structure regardless of source format.
+- Unified normalization layer Converts raw logs into a consistent structure regardless of source format.
     
-- **Metrics engine** Counts:
+- Metrics engine Counts source IPs, usernames, passwords, ports, user agents, and URL paths.
     
-    - Source IPs
-        
-    - Usernames
-        
-    - Passwords
-        
-    - Ports
-        
-    - User agents
-        
-    - URL paths
-        
-- **Flexible output**
+- Flexible output
     
     - Human‑readable text
         
     - JSON
         
-- **Debug mode** Print normalized entries as they are processed.
+- Debug mode Prints normalized entries as they are processed.
     
 
-## **Installation**
+## Installation
 
 Clone the repository:
 
-bash
+Code
 
 ```
-git clone https://github.com/yourusername/PyParser.git
-cd PyParser
+git clone https://github.com/yourusername/LOGPARSER.git
+cd LOGPARSER
 ```
 
-Run with Python 3:
+Create a virtual environment (optional but recommended):
 
-bash
-
-```
-python3 pyparser.py --help
-```
-
-## **Usage**
-
-### **Basic example**
-
-bash
+Code
 
 ```
-python3 pyparser.py \
+python3 -m venv venv
+source venv/bin/activate        # macOS/Linux
+.\venv\Scripts\Activate.ps1     # Windows PowerShell
+```
+
+Install dependencies:
+
+Code
+
+```
+pip install -r requirements.txt
+```
+
+## Usage
+
+### Basic example
+
+Code
+
+```
+python3 LogParser.py \
     --filepath logs/http.csv \
     --file-type CSV \
     --log-type HTTP
 ```
 
-### **Show top 20 results**
+### Show top 20 results
 
-bash
+Code
 
 ```
-python3 pyparser.py \
+python3 LogParser.py \
     --filepath logs/ssh.json \
     --file-type JSON \
     --log-type SSH \
     --top 20
 ```
 
-### **Output as JSON**
+### Output as JSON
 
-bash
+Code
 
 ```
-python3 pyparser.py \
+python3 LogParser.py \
     --filepath logs/firewall.xml \
     --file-type XML \
     --log-type Firewall \
     --output-format json
 ```
 
-### **Debug mode (print normalized entries)**
+### Debug mode (print normalized entries)
 
-bash
+Code
 
 ```
-python3 pyparser.py --debug ...
+python3 LogParser.py --debug ...
 ```
 
-## **How It Works**
+## How It Works
 
-### **1. Reader Layer**
+### 1. Reader Layer
 
-PyParser automatically selects the correct reader based on `--file-type`:
+LogParser automatically selects the correct reader based on `--file-type`. Each reader yields raw dictionaries with no validation or type casting.
 
-- `read_log_csv()`
-    
-- `read_log_json()`
-    
-- `read_log_xml()`
-    
-- `read_log_tab()`
-    
-
-Each reader yields **raw dictionaries** with no validation or type casting.
-
-### **2. Normalization Layer**
+### 2. Normalization Layer
 
 Raw entries are converted into a unified structure:
 
-python
+Code
 
 ```
 {
@@ -148,7 +142,7 @@ python
 
 This ensures the metrics engine always receives predictable data.
 
-### **3. Metrics Engine**
+### 3. Metrics Engine
 
 Counts meaningful fields using `collections.Counter`:
 
@@ -165,7 +159,7 @@ Counts meaningful fields using `collections.Counter`:
 - URL paths
     
 
-### **4. Output Layer**
+### 4. Output Layer
 
 Produces either:
 
@@ -174,20 +168,58 @@ Produces either:
 - JSON output
     
 
-## **Project Structure**
+## Project Structure
+
+Code
+
+
+```
+LOGPARSER/
+│
+├── LogParser.py            # Main script
+├── requirements.txt
+├── README.md
+│
+├── assets/                 # Logos, images, diagrams
+│   └── logo.png
+│
+├── scripts/                # Helper scripts
+│   ├── bootstrap.sh
+│   └── bootstrap.ps1
+│
+├── logs/               # Sample logs
+│   ├── sample_http.csv
+│   ├── sample_ssh.json
+│   └── sample_firewall.xml
+│
+└── tests/                  # Optional unit tests
+```
+
+## Bootstrap Script
+
+To help contributors get started quickly, LogParser includes optional bootstrap scripts.
+
+macOS/Linux:
 
 Code
 
 ```
-pyparser.py
-README.md
-logs/
-    sample_http.csv
-    sample_ssh.json
-    sample_firewall.xml
+./scripts/bootstrap.sh
 ```
 
-## **Planned Enhancements**
+Windows PowerShell:
+
+Code
+
+```
+.\scripts\bootstrap.ps1
+```
+
+These create a virtual environment and install dependencies automatically.
+
+## Roadmap
+
+Planned enhancements may include:
 
 - GeoIP lookup
     
@@ -198,3 +230,10 @@ logs/
 - Export to CSV
     
 - Multi‑file batch processing
+    
+- Plugin system for new log types
+    
+
+## License
+
+MIT License
