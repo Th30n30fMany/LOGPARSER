@@ -3,7 +3,7 @@
 A lightweight, modular log‑analysis tool for DShield honeypots and other security logs.
 
 <p align="center">
-<img src="assets/logo.jpg" width="180" alt="LogParser Logo">
+<img src="assets/logo_log.png" width="180" alt="LogParser Logo">
 </p>
 
 LogParser (pronounced like wood log, not system log) is a simple but powerful Python tool for parsing, normalizing, and analyzing logs from HTTP, SSH/Telnet, and Firewall sources. It supports multiple input formats, produces clean metrics, and outputs human‑readable or JSON reports.
