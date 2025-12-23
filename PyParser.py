@@ -8,6 +8,7 @@ import json
 import csv  
 import xml.etree.ElementTree as ET
 from datetime import datetime 
+from collections import Counter
 # import re 
 # import datetime
 # import lxml.etree
@@ -76,6 +77,7 @@ def build_timestamp(date_str, time_str):
         except ValueError:
             continue
     raise ValueError(f"Unrecognized timestamp format: {combined}")
+
 
 ################# END variables and Constants END ####################
 
@@ -280,22 +282,49 @@ def get_log_reader(file_type):
 ################# END Reader Functions END ####################
 
 
-################# Metrics and Parsing ####################
+################# Metrics & Proccessing ####################
+metrics = {
+    "source_ip": Counter(),
+    "url_path": Counter(),
+    "user_agent": Counter(),
+    "username": Counter(),
+    "password": Counter(),
+    "source_port": Counter(),
+    "target_port": Counter(),
+    "target_ip": Counter(),
+    "total_entries": 0
+}
+# Process metrics function
+def process(entry):
+    metrics["total_entries"] += 1
 
-# Define functions to parse log entries based on log type 
-# 
+    # Top-level fields
+    if entry["source_ip"]: 
+        metrics["source_ip"][entry["source_ip"]] += 1
 
-## CSV log parser function
+    # Event-specific fields 
+    for field, value in entry["details"].items():
+        if value: 
+            metrics[field][value] += 1
 
-## JSON log parser function
+# Output function 
+def output_results(top=10, format="text"): 
+    if format == "json": 
+        print(json.dumps(metrics, indent=4, default=str))
+        return
+    # text ouput
+    print("\n===== Log Analysis Report =====")
+    print(f"Total Entryies: {metrics['total_entries']}\n")
 
-## XML log parser function
-
-## TAB delimited log parser function 
-
-
-# Define function to output parsed data in desired format (JSON, CSV, TXT)
-## Write to file or print to console based on user preference
+    for key, coutner in metrics.items(): 
+        if key == "total_entries":
+            continue
+        
+        print(f"Top {top} {key}:")
+        for value, count in coutner.most_common(top):
+            print(f"  {value}: {count}")
+        print()
+        
 
 # Main function to coordinate reading, parsing, and outputting log data
 def main():
